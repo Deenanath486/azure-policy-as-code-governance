@@ -1,0 +1,43 @@
+{
+  "properties": {
+    "displayName": "Allowed Azure Deployment Locations",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "description": "Restricts resource deployments strictly to approved data residency regions (Central India, South India).",
+    "metadata": {
+      "category": "Governance",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "allowedLocations": {
+        "type": "Array",
+        "metadata": {
+          "displayName": "Allowed Locations",
+          "description": "List of approved Azure regions"
+        },
+        "defaultValue": ["centralindia", "southindia"]
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "location",
+            "notIn": "[parameters('allowedLocations')]"
+          },
+          {
+            "field": "location",
+            "notEquals": "global"
+          },
+          {
+            "field": "type",
+            "notEquals": "Microsoft.AzureActiveDirectory/b2cDirectories"
+          }
+        ]
+      },
+      "then": {
+        "effect": "Deny"
+      }
+    }
+  }
+}

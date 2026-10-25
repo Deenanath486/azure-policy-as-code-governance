@@ -1,0 +1,37 @@
+{
+  "properties": {
+    "displayName": "Require Secure TLS 1.2+ and HTTPS for Storage Accounts",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "description": "Enforces minimum TLS version 1.2 and HTTPS traffic only on all Azure Storage Accounts.",
+    "metadata": {
+      "category": "Storage",
+      "version": "1.0.0"
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Storage/storageAccounts"
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.Storage/storageAccounts/supportsHttpsTrafficOnly",
+                "equals": "false"
+              },
+              {
+                "field": "Microsoft.Storage/storageAccounts/minimumTlsVersion",
+                "notEquals": "TLS1_2"
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "Deny"
+      }
+    }
+  }
+}

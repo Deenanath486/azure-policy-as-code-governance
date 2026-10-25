@@ -1,0 +1,31 @@
+{
+  "properties": {
+    "displayName": "Deny Public IP on Network Interfaces",
+    "policyType": "Custom",
+    "mode": "All",
+    "description": "Denies creation or update of Network Interfaces configured with Public IP addresses, enforcing private networking and Azure Bastion access.",
+    "metadata": {
+      "category": "Network",
+      "version": "1.0.0"
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Network/networkInterfaces"
+          },
+          {
+            "not": {
+              "field": "Microsoft.Network/networkInterfaces/ipConfigurations[*].publicIpAddress.id",
+              "exists": "false"
+            }
+          }
+        ]
+      },
+      "then": {
+        "effect": "Deny"
+      }
+    }
+  }
+}

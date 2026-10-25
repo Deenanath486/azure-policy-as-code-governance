@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "displayName": "Enforce Mandatory Resource Tags",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "description": "Enforces mandatory presence of tags (Environment, Owner, CostCenter) on resource creation.",
+    "metadata": {
+      "category": "Governance",
+      "version": "1.0.0"
+    },
+    "policyRule": {
+      "if": {
+        "anyOf": [
+          {
+            "field": "tags['Environment']",
+            "exists": "false"
+          },
+          {
+            "field": "tags['Owner']",
+            "exists": "false"
+          },
+          {
+            "field": "tags['CostCenter']",
+            "exists": "false"
+          }
+        ]
+      },
+      "then": {
+        "effect": "Deny"
+      }
+    }
+  }
+}
